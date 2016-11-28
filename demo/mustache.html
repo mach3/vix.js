@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+	<header data-view="header" data-api="header"></header>
+	<main>
+		<article>
+			<div data-view="profile" data-api="profile"></div>
+		</article>
+	</main>
+	<footer data-view="footer" data-api="profile"></footer>
+
+
+	<!-- Templates -->
+	<script type="x-template-mustache" data-template="header">
+		<div class="header">
+			<h1>{{title}}</h1>
+			<p>{{description}}</p>
+		</div>
+	</script>
+
+	<script type="x-template-mustache" data-template="profile">
+		<dl>
+			<dt>Name</dt>
+			<dd>{{name}}</dd>
+			<dt>Version</dt>
+			<dd>{{version}}</dd>
+		</dl>
+	</script>
+
+	<script type="x-template-mustache" data-template="footer">
+		<p>
+			License: {{license}} / Author : {{author}}
+		</p>
+	</script>
+	<!-- /Templates -->
+
+	<script src="../node_modules/jquery/dist/jquery.js"></script>
+	<script src="../node_modules/mustache/mustache.js"></script>
+	<script src="../src/vix.js"></script>
+
+	<script>
+
+	var api = {
+		header: function(){
+			return {
+				title: "Vix.js Demo with Mustache",
+				description: "Use mustache.js as rendering engine"
+			}
+		},
+		profile: function(){
+			return $.ajax({url: "/package.json"});
+		}
+	};
+
+	Vix.config({
+		engine: "mustache",
+		api: api
+	})
+	.render();
+
+	</script>
+
+</body>
+</html>

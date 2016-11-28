@@ -1,0 +1,15 @@
+
+<dl>
+	<dt>Name</dt>
+	<dd><%-name %></dd>
+	<dt>Version</dt>
+	<dd><%-version %></dd>
+	<dt>Dependencies</dt>
+	<dd>
+		<ul>
+			<% _.each(dependencies, function(version, key){ %>
+			<li><%-key %> (<%-version %>)</li>
+			<% }) %>
+		</ul>
+	</dd>
+</dl>

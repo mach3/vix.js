@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+	<header data-view="header" data-api="header"></header>
+	<main>
+		<article>
+			<div data-view="update" data-api="update" class="update"></div>
+		</article>
+		<article>
+			<div data-view="main" data-api="profile"></div>
+		</article>
+		<aside>
+			<pre id="log"></pre>
+		</aside>
+	</main>
+	<footer data-view="footer" data-api="profile"></footer>
+
+	<script src="../node_modules/jquery/dist/jquery.js"></script>
+	<script src="../node_modules/lodash/lodash.js"></script>
+	<script src="../src/vix.js"></script>
+
+	<script>
+
+	var api = {
+
+		header: function(){
+			return {
+				title: "Vix.js Demo",
+				description: "Simple view mixer library"
+			}
+		},
+
+		profile: function(){
+			return $.ajax({
+				url: "/package.json"
+			});
+		},
+
+		update: function(){
+			return {
+				time: "none"
+			};
+		}
+	};
+
+	$(document).on("rendered", "[data-view]", function(e){
+		var el = $(e.currentTarget);
+		var line = "[RENDERED] view: " + el.data("view") + ", api: " + el.data("api") + " (" + $.now() + ")\n";
+		$("#log").prepend(line);
+	});
+
+	$(".update").on("click", "button", function(e){
+		Vix.refresh("update", {
+			time: $.now()
+		});
+	});
+
+	Vix.config({
+		templatePath: "./templates",
+		api: api
+	})
+	.render();
+
+	</script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+body {
+	margin: 0;
+}
+.header {
+	background-color: #069;
+	padding: 1em;
+	color: #fff;
+}
+
+main {
+	padding: 1em;
+}
+
+article {
+	margin: 2em 0;
+}
+
+#log {
+	background-color: #333;
+	color: #ccc;
+	padding: 1em;
+	line-height: 2em;
+	max-height: 8em;
+	overflow: auto;
+}
+
+footer {
+	background-color: #def;
+	padding: 1em;
+}
+
+.override-demo {
+	display: inline-block;
+	padding: 1em;
+	margin: 2em 0;
+	color: #fff;
+}

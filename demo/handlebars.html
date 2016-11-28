@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+	<header data-view="header" data-api="header"></header>
+	<main>
+		<article>
+			<h2>Profile</h2>
+			<div data-view="profile" data-api="profile"></div>
+		</article>
+		<article>
+			<h2>Override Demo</h2>
+			<button name="color" value="red">RED</button>
+			<button name="color" value="green">GREEN</button>
+			<button name="color" value="blue">BLUE</button>
+			<div data-view="override"></div>
+		</article>
+		<article>
+			<pre id="log"></pre>
+		</article>
+	</main>
+	<footer data-view="footer" data-api="profile"></footer>
+
+
+	<script src="../node_modules/jquery/dist/jquery.js"></script>
+	<script src="../node_modules/handlebars/dist/handlebars.js"></script>
+	<script src="../src/vix.js"></script>
+
+	<script>
+
+	var _api = {
+		header: function(){
+			return {
+				title: "Vix.js Demo with Handlebars",
+				description: "Use handlebars.js as rendering engine"
+			}
+		},
+		profile: function(){
+			return $.ajax({url: "/package.json"});
+		}
+	};
+
+	$("[name=color]").on("click", function(){
+		$("[data-view=override]").vix(true, {
+			color: this.value
+		});
+	});
+
+	var _renderLogLine = Handlebars.compile("[RENDERED] view: {{view}}, api: {{api}} ({{time}})\n");
+
+	Vix.config({
+		engine: "handlebars",
+		api: _api
+	})
+	.template({
+		header: '\
+			<div class="header">\
+				<h1>{{title}}</h1>\
+				<p>{{description}}</p>\
+			</div>\
+		',
+		profile: '\
+			<dl>\
+				<dt>Name</dt>\
+				<dd>{{name}}</dd>\
+				<dt>Version</dt>\
+				<dd>{{version}}</dd>\
+				<dt>Dependencies</dt>\
+				<dd>\
+					<ul>\
+					{{#each dependencies}}\
+					<li>{{@key}} ( {{this}} )</li>\
+					{{/each}}\
+					</ul>\
+				</dd>\
+			</dl>\
+		',
+		footer: '\
+			<p>\
+				License: {{license}} / Author : {{author}}\
+			</p>\
+			<p data-view="thanks"></p>\
+		',
+		override: '\
+			<span class="override-demo" style="background-color:{{color}};">\
+				{{color}}\
+			</span>\
+		',
+		thanks: '\
+			<small>Thanks</small>\
+		'
+	})
+	.on("rendered", function(e){
+		var el, line;
+		el = $(this);
+		line = _renderLogLine({
+			view: el.data("view"),
+			api: el.data("api"),
+			time: $.now
+		});
+		$("#log").prepend(line);
+	})
+	.render();
+
+	</script>
+
+</body>
+</html>
