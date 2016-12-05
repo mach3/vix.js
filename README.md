@@ -111,6 +111,47 @@ config() で何も設定をおこなわなかった場合は、グローバル�
 	};
 	</script>
 
+### 引数
+
+APIには以下が引数として渡されます。
+
+1. ビューの要素（HTML*Element）
+2. ビューの要素の data-* 属性（Object）
+3. オーバーライド（後述）のオブジェクト（Object）
+
+
+
+```
+<div data-view="header" data-api="header" data-index="1"></div>
+
+<script>
+	var myAPI = {
+		header: function(el, data, override){
+			console.log(arguments);
+		}
+	};
+
+	Vix.config({ api: myAPI }).render();
+
+	Vix.refresh("header", {
+		title: "Hello, World"
+	});
+	/*
+		[
+			div (HTMLDivElement),
+			{
+				view: "header",
+				api: "header",
+				index: "1"
+			},
+			{
+				title: "Hello, World"
+			}
+		]
+	*/
+</script>
+```
+
 ### 返り値
 
 APIの返り値は、プレーンなオブジェクトか、Deferred オブジェクトが使えます。
