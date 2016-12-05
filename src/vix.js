@@ -51,7 +51,8 @@
 				if(rendered && force){
 					this.el.html("");
 				}
-				con.children().appendTo(this.el);
+				// con.children().appendTo(this.el);
+				this.el.append(con.html());
 				this.el.trigger(this.EVENT_RENDERED);
 			}).bind(this);
 		},
@@ -93,7 +94,7 @@
 			api = this.dig(d.api);
 
 			if($.isFunction(api)){
-				r = api.apply(this, [override]);
+				r = api.apply(this, [this.el.get(0), this.el.data(), override]);
 
 				if(! $.isFunction(r.done)){
 					this.setData(r, override);

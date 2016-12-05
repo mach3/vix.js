@@ -1,7 +1,7 @@
 /*!
  * Vix.js
  * ---------------------------
- * @version 0.1.0 (2016-11-28)
+ * @version 0.1.0 (2016-12-05)
  * @license MIT
  * @author mach3<mach3@mach3.jp>
  */
@@ -58,7 +58,8 @@
 				if(rendered && force){
 					this.el.html("");
 				}
-				con.children().appendTo(this.el);
+				// con.children().appendTo(this.el);
+				this.el.append(con.html());
 				this.el.trigger(this.EVENT_RENDERED);
 			}).bind(this);
 		},
@@ -100,7 +101,7 @@
 			api = this.dig(d.api);
 
 			if($.isFunction(api)){
-				r = api.apply(this, [override]);
+				r = api.apply(this, [this.el.get(0), this.el.data(), override]);
 
 				if(! $.isFunction(r.done)){
 					this.setData(r, override);
@@ -138,15 +139,6 @@
 		__templates__: {},
 		__instanceKey__: "__VixInstance__",
 		__instanceStack__: [],
-
-		// init: function(){
-		// 	var self = this;
-		// 	$("script[data-template]").each(function(){
-		// 		var el = $(this);
-		// 		self.template(el.data("template"), el.html());
-		// 	});
-		// 	return this;
-		// },
 
 		getInstance: function(name){
 			// remove garbage
