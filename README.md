@@ -186,6 +186,40 @@ Deferred オブジェクト同様に、$.ajax() の返り値をそのまま渡�
 	};
 
 
+## コールバックの宣言・イベント
+
+描画完了時の処理を設定する事ができます。
+
+```
+<div data-view="demo" data-done="demo"></div>
+
+<script>
+	var myDone = {
+		demo: function(e){
+			// 描画完了時の処理
+			// this は [data-view] 要素
+			$(this).fadeIn();
+		}
+	};
+
+	Vix.config({
+		done: myDone
+	})
+	.render();
+</script>
+```
+
+### イベント
+
+[data-view] 要素は、描画完了時に "rendered" イベントを発火します。
+コールバック機能は、各要素の "rendered" イベントハンドラに関数を設定しているにすぎません。
+よって、上のコードは以下と同義の処理です。
+
+	$("[data-view=demo]").on("rendered", function(e){
+		$(this).fadeIn();
+	});
+
+
 ## 再描画とオーバーライド
 
 一度描画完了したパーツを再描画するには、`Vix.refresh()` を使用します。

@@ -1,7 +1,7 @@
 /*!
  * Vix.js
  * ---------------------------
- * @version 0.1.0 (2016-12-05)
+ * @version 0.1.0 (2016-12-06)
  * @license MIT
  * @author mach3<mach3@mach3.jp>
  */
@@ -33,11 +33,16 @@
 			templatePath: "templates",
 			templateExt: ".html",
 			api: window,
+			done: window,
 			engine: "lodash" // "lodash" | "mustache" | "handlebars"
 		},
 
 		render: function(force, override){
 			var d = this.el.data();
+
+			if(! d.rendered && !! d.done){
+				this.el.on(this.EVENT_RENDERED, this.dig(d.done, this.options.done))
+			}
 
 			if(! d.rendered || force){
 				$.when(

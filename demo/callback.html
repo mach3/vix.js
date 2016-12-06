@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+	<header>
+		<div class="header">
+			<h1>Vix.js Demo with callback</h1>
+			<p>Use data-done attribute</p>
+		</div>
+	</header>
+
+	<main>
+		<article>
+			<p>
+				<button id="button-refresh">Refresh</button>
+			</p>
+			<div data-view="list" data-api="list" data-done="list"></div>
+		</article>
+	</main>
+
+	<script type="text/template" data-template="list">
+	<ul class="demo-list">
+		{{#list}}
+		<li style="background-color: {{this.color}}">{{this.value}}</li>
+		{{/list}}
+	</ul>
+	</script>
+
+
+	<script src="../node_modules/jquery/dist/jquery.js"></script>
+	<script src="../node_modules/handlebars/dist/handlebars.js"></script>
+	<script src="../src/vix.js"></script>
+
+	<script>
+
+	Vix.config({
+		engine: "handlebars",
+		api: {
+			list: function(){
+				var rand, count = 16, list = [];
+				rand = function(list){
+					var i = Math.floor(Math.random() * list.length);
+					return list[i];
+				};
+				while(count--){
+					list.push({
+						color: rand(["red", "green", "blue"]),
+						value: rand(["foo", "bar", "baz"])
+					});
+				}
+				return {
+					list: list
+				};
+			}
+		},
+		done: {
+			list: function(){
+				var delay = 0;
+				$(this).find("li").each(function(){
+					delay += 100;
+
+					$(this).stop().delay(delay).animate({
+						opacity: 1
+					});
+				});
+			}
+		}
+	})
+	.render();
+
+	$("#button-refresh").on("click", function(){
+		Vix.refresh("list");
+	});
+
+	</script>
+	
+</body>
+</html>
