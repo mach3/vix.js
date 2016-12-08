@@ -1,7 +1,7 @@
 /*!
  * Vix.js
  * ---------------------------
- * @version 0.1.0 (2016-12-06)
+ * @version 0.1.0 (2016-12-08)
  * @license MIT
  * @author mach3<mach3@mach3.jp>
  */
@@ -103,7 +103,7 @@
 			var df, api, r, self = this;
 
 			df = $.Deferred();
-			api = this.dig(d.api);
+			api = this.dig(d.api) || this.dig(this.name);
 
 			if($.isFunction(api)){
 				r = api.apply(this, [this.el.get(0), this.el.data(), override]);

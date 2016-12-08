@@ -96,7 +96,7 @@
 			var df, api, r, self = this;
 
 			df = $.Deferred();
-			api = this.dig(d.api);
+			api = this.dig(d.api) || this.dig(this.name);
 
 			if($.isFunction(api)){
 				r = api.apply(this, [this.el.get(0), this.el.data(), override]);
