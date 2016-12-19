@@ -2,7 +2,7 @@
   "name": "vix.js",
   "version": "0.1.0",
   "description": "Simple View Mixer",
-  "main": "index.js",
+  "main": "dist/vix.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

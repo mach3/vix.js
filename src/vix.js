@@ -6,7 +6,8 @@
 		this.name = this.el.data("view");
 
 		if(! this.name){
-			throw new Error("No Template");
+			console.error("No Template");
+			return;
 		}
 
 		Vix.__instanceStack__.push(this);
@@ -27,14 +28,16 @@
 			templateExt: ".html",
 			api: window,
 			done: window,
-			engine: "lodash" // "lodash" | "mustache" | "handlebars"
+			engine: "handlebars" // "lodash" | "mustache" | "handlebars"
 		},
 
 		render: function(force, override){
 			var d = this.el.data();
 
-			if(! d.rendered && !! d.done){
-				this.el.on(this.EVENT_RENDERED, this.dig(d.done, this.options.done))
+			if(! this.name) return;
+
+			if(! d.rendered){
+				this.el.on(this.EVENT_RENDERED, this.fetchCallback(d));
 			}
 
 			if(! d.rendered || force){
@@ -56,8 +59,7 @@
 				if(rendered && force){
 					this.el.html("");
 				}
-				// con.children().appendTo(this.el);
-				this.el.append(con.html());
+				con.contents().appendTo(this.el);
 				this.el.trigger(this.EVENT_RENDERED);
 			}).bind(this);
 		},
@@ -101,11 +103,14 @@
 			if($.isFunction(api)){
 				r = api.apply(this, [this.el.get(0), this.el.data(), override]);
 
-				if(! $.isFunction(r.done)){
+				if(r === void 0){
+					return df.resolve();
+				}
+				if(! $.isFunction(r.then)){
 					this.setData(r, override);
 					return df.resolve();
 				}
-				r.done(function(data){
+				r.then(function(data){
 					self.setData(
 						($.type(data) === "string") ? $.parseJSON(data) : data,
 						override
@@ -118,6 +123,13 @@
 			}
 
 			return df.promise();
+		},
+
+		fetchCallback: function(d){
+			return this.dig(
+				("done" in d) ? d.done : this.name,
+				this.options.done
+			) || function(){};
 		},
 
 		dig: function(path, o){
