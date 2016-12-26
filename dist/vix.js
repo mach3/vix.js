@@ -1,7 +1,7 @@
 /*!
  * Vix.js
  * ---------------------------
- * @version 0.1.0 (2016-12-19)
+ * @version 0.1.1 (2016-12-26)
  * @license MIT
  * @author mach3<mach3@mach3.jp>
  */
